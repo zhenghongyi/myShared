@@ -1,6 +1,7 @@
 # myShared
 记录和分享开发中的所见所得
 
+## iOS
 * [自动添加TestID](https://github.com/zhenghongyi/myShared/tree/master/自动添加TestID)
 > 为方便UITest使用自动添加TestID(accessibilityIdentifier)
 
@@ -10,3 +11,9 @@
 
 * [UITableCell选择状态扩展](https://github.com/zhenghongyi/myShared/tree/master/UITableCell选择状态扩展)
 > 扩展UITableCell编辑状态为选择功能，代码无侵入，方便为已有列表做出一个选择功能
+
+
+## Python
+* [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
+
+> 依照angular提交规范(暂只支持fix和feat)，生成修改日志
