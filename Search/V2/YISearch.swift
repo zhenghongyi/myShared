@@ -60,16 +60,16 @@ extension UISearchController {
         }
     }
     
-    var otherInfo:Any? {
+    @objc var otherInfo:Any? {
         return nil
     }
     
-    var searchDelay:TimeInterval {
+    @objc var searchDelay:TimeInterval {
         return 2.0
     }
     
     // 针对多个搜索条件情况，作为搜索的uuid，过滤掉和最后搜索相同的搜索条件，也防止pop回来导致的触发搜索
-    var searchHash:String {
+    @objc var searchHash:String {
         return searchBar.text ?? ""
     }
     
