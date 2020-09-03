@@ -12,6 +12,9 @@
 * [UISearchController解耦方案](https://github.com/zhenghongyi/myShared/tree/master/Search)
 > 一个UISearchController的解耦方案，分离UISearchController，resultController和搜索逻辑
 
+* [UISearchController调用简化方案](https://github.com/zhenghongyi/myShared/tree/master/Search/V2)
+> 扩展UISearchController，简化调用过程
+
 * [UITableCell选择状态扩展](https://github.com/zhenghongyi/myShared/tree/master/UITableCell选择状态扩展)
 > 扩展UITableCell编辑状态为选择功能，代码无侵入，方便为已有列表做出一个选择功能
 
