@@ -17,6 +17,8 @@ protocol YISearchResponder {
 protocol YISearchResultVC {
     func updateResults(keyWord:String?, other:Any?, result:Result<Any, Error>)
     
+    func willSearch(by keyWord:String?, other:Any?)
+    
     func willPresent(searchController:UISearchController)
     func didPresent(searchController:UISearchController)
     func willDismiss(searchController:UISearchController)
@@ -25,6 +27,8 @@ protocol YISearchResultVC {
 }
 
 extension YISearchResultVC {
+    func willSearch(by keyWord:String?, other:Any?) {}
+    
     func willPresent(searchController:UISearchController) {}
     func didPresent(searchController:UISearchController) {}
     func willDismiss(searchController:UISearchController) {}
@@ -83,14 +87,20 @@ extension UISearchController {
         return nil
     }
     
-    @objc func startSearch() {
-        if let oldHash = oldSearchHash, oldHash == searchHash {
+    func doSearch() {
+        if oldHash == searchHash {
             return
         }
-        oldSearchHash = searchHash
         
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(startSearch), object: oldHash)
+        oldHash = searchHash
+        perform(#selector(startSearch), with: searchHash, afterDelay: searchDelay)
+    }
+    
+    @objc private func startSearch(by hashKey:String) {
         let key = searchBar.text
         
+        resultVC.willSearch(by: key, other: other)
         responder?.search(key: key, other: otherInfo, finish: {[weak self] (result) in
             self?.resultVC?.updateResults(keyWord: key, other: self?.otherInfo, result: result)
         })
@@ -99,8 +109,7 @@ extension UISearchController {
 
 extension UISearchController: UISearchResultsUpdating {
     public func updateSearchResults(for searchController: UISearchController) {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(startSearch), object: nil)
-        perform(#selector(startSearch), with: nil, afterDelay: searchDelay)
+        doSearch()
     }
 }
 
