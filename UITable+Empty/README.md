@@ -99,4 +99,4 @@ extension UITableView {
 
 ### 后记
 
-参考了大神的[开源](https://github.com/ChenYilong/CYLTableViewPlaceHolder)，从自己的想法出发，自己做的一套方案，主要是想简化调用方式和增加约束，也补上原设计里不能设置空提示图位置的问题。但也不想过度设计，
+参考了大神的[设计](https://github.com/ChenYilong/CYLTableViewPlaceHolder)，从自己的想法出发，自己做的一套方案，主要是想简化调用方式和增加约束，也补上原设计里不能设置空提示图位置的问题。

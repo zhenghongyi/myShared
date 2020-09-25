@@ -73,8 +73,8 @@ extension UISearchController {
     }
     
     // 针对多个搜索条件情况，作为搜索的uuid，过滤掉和最后搜索相同的搜索条件，也防止pop回来导致的触发搜索
-    @objc var searchHash:String {
-        return searchBar.text ?? ""
+    @objc var searchHash:String? {
+        return searchBar.text
     }
     
     var resultVC:YISearchResultVC? {
@@ -88,19 +88,23 @@ extension UISearchController {
     }
     
     func doSearch() {
-        if oldHash == searchHash {
+        if oldSearchHash == searchHash {
             return
         }
         
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(startSearch), object: oldHash)
-        oldHash = searchHash
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(startSearch), object: oldSearchHash)
+        oldSearchHash = searchHash
         perform(#selector(startSearch), with: searchHash, afterDelay: searchDelay)
+    }
+    
+    func reset() {
+        oldSearchHash = nil
     }
     
     @objc private func startSearch(by hashKey:String) {
         let key = searchBar.text
         
-        resultVC.willSearch(by: key, other: other)
+        resultVC?.willSearch(by: key, other: otherInfo)
         responder?.search(key: key, other: otherInfo, finish: {[weak self] (result) in
             self?.resultVC?.updateResults(keyWord: key, other: self?.otherInfo, result: result)
         })
