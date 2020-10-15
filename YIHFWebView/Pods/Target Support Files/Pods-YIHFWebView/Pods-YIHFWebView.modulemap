@@ -1,0 +1,6 @@
+module Pods_YIHFWebView {
+  umbrella header "Pods-YIHFWebView-umbrella.h"
+
+  export *
+  module * { export * }
+}

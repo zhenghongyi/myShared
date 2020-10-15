@@ -24,13 +24,16 @@
 * [主题更换新思路](https://github.com/zhenghongyi/myShared/tree/master/YIThemeCenter)
 > 采用弱引用数组来实现主题更换，在通用的利用通知更换主题做法外提供另一种实现思路，支持xib设置
 
+* [Head-Foot WebView](https://github.com/zhenghongyi/myShared/tree/master/YIHFWebView)
+> Head-WebView-Foot 三段式形式界面实现案例
+
 
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
 
 > 依照angular提交规范(暂只支持fix和feat)，生成修改日志
 
-## Git
+## Other
 
 * [Github-Actions](https://github.com/zhenghongyi/myShared/tree/master/Github-Action/Github-Action.md)
 

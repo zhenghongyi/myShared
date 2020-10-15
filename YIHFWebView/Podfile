@@ -1,0 +1,3 @@
+target 'YIHFWebView' do
+  pod 'SnapKit'
+end
