@@ -110,6 +110,8 @@ let searchVC = MySearchController(searchResultsController: resultVC)
 let search = GlobalSearch()
 let searchHP = SearchHelper(searchPtl: search, resultPtl: resultVC, searchVCPtl: searchVC)
 ```
+ <img src="./多个搜索.png" width = "321" height = "694.5" align=center />
+ <img src="./多个搜索结果.png" width = "321" height = "694.5" align=center />
 
 ***
 
