@@ -27,6 +27,9 @@
 * [Head-Foot WebView](https://github.com/zhenghongyi/myShared/tree/master/YIHFWebView)
 > Head-WebView-Foot 三段式形式界面实现案例
 
+* [XMLReader](https://github.com/zhenghongyi/myShared/tree/master/XMLReader)
+> 解析XML，将XML转换为字典形式
+
 
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
