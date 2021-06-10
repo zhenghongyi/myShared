@@ -30,6 +30,9 @@
 * [XMLReader](https://github.com/zhenghongyi/myShared/tree/master/XMLReader)
 > 解析XML，将XML转换为字典形式
 
+* [iOS证书签名解析](https://github.com/zhenghongyi/myShared/tree/master/细说iOS代码签名.pdf)
+> [转载]详细讲解iOS证书签名的组成
+
 
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
