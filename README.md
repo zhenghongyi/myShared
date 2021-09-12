@@ -33,6 +33,9 @@
 * [iOS证书签名解析](https://github.com/zhenghongyi/myShared/tree/master/细说iOS代码签名.pdf)
 > [转载]详细讲解iOS证书签名的组成
 
+* [iOS下用模数指数进行RSA加密](https://github.com/zhenghongyi/myShared/tree/master/RSA-m&n)
+> iOS下用模数指数进行RSA加密
+
 
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
