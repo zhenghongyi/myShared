@@ -14,9 +14,10 @@
 
 import UIKit
 
-private var YITableCellDataSelectedKey = "YITableCell_DataSelected_Key"
-private var YITableCellDataSelectedImgKey = "YITableCell_DataSelected_Img_Key"
-private var YITableCellDataUnSelectedImgKey = "YITableCell_DataUnSelected_Img_Key"
+private var YITableCellDataSelectedKey:String = "YITableCell_DataSelected_Key"
+private var YITableCellDataSelectedImgKey:String = "YITableCell_DataSelected_Img_Key"
+private var YITableCellDataUnSelectedImgKey:String = "YITableCell_DataUnSelected_Img_Key"
+private var YITableCellEditButtonTag:Int = 9527
 
 extension UITableViewCell {
     
@@ -55,19 +56,30 @@ extension UITableViewCell {
             return
         }
         
+        let img:UIImage = isDataSelected ? selectedImg! : unselectedImg!
+        if let button = viewWithTag(YITableCellEditButtonTag) as? UIButton {
+            button.setImage(img, for: .normal)
+            return
+        }
+        
+        var editControlFrame:CGRect = .zero
         for control in subviews where control.isMember(of: editClass) {
-            for itemView in control.subviews {
-                if let imgView = itemView as? UIImageView {
-                    imgView.image = isDataSelected ? selectedImg : unselectedImg
-                    break
-                }
-            }
+            editControlFrame = control.frame
             break
+        }
+        
+        if viewWithTag(YITableCellEditButtonTag) == nil {
+            let button:UIButton = UIButton(type: .custom)
+            button.tag = YITableCellEditButtonTag
+            button.isUserInteractionEnabled = false
+            button.frame = editControlFrame
+            button.setImage(img, for: .normal)
+            addSubview(button)
         }
     }
     
     func hideSelection() {
-        contentView.frame = CGRect(x: 0, y: 0, width: width, height: contentView.height)
+        contentView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
         bringSubviewToFront(contentView)
     }
 }

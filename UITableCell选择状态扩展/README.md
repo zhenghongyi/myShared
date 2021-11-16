@@ -9,39 +9,43 @@
 2. 需要设置selectionStyle = .none，屏蔽系统原有Selection响应点击逻辑
 3. hideSelection()是在某些混合可选cell和普通cell的场景下，为普通cell隐藏可选模式，建议放在layoutSubview方法里
 
-### 用法
+### 例子
 
 ```
-var selectionIndex:[Int] = []
-
-override func viewDidLoad() {
-    super.viewDidLoad()
+let tableView:UITableView = UITableView()
     
-    ......
-    tableView.showSelection()
-}
-
-......
-override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    ......
-    
-    cell.selectionStyle = .none
-
-    return cell
-}
-    
-override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    cell.selectedImg = UIImage(named: "Selected")
-    cell.unselectedImg = UIImage(named: "UnSelected")
-    cell.isDataSelected = selectionIndex.contains(indexPath.row)
-}
-    
-override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if selectionIndex.contains(indexPath.row) == false {
-        selectionIndex.append(indexPath.row)
-    } else {
-        selectionIndex.removeAll(where: { $0 == indexPath.row })
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        ...
+        tableView.showSelection()
     }
-    tableView.reloadRows(at: [indexPath], with: .none)
-}
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 30
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        ...
+        cell.textLabel?.text = "\(indexPath.row)"
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let imgs = cellImg(indexPath: indexPath)
+        cell.unselectedImg = imgs.0
+        cell.selectedImg = imgs.1
+        cell.isDataSelected = (indexPath.row % 2) == 0
+    }
+    
+    func cellImg(indexPath:IndexPath) -> (UIImage?, UIImage?) {
+        if indexPath.row % 3 == 0 {
+            return (UIImage(named: "forbinden"), UIImage(named: "forbinden"))
+        } else {
+            return (UIImage(named: "uncheck"), UIImage(named: "check"))
+        }
+    }
 ```
+
+![image](https://github.com/zhenghongyi/myShared/tree/master/UITableCell选择状态扩展/TableSelection.png)
