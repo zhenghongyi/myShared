@@ -36,6 +36,8 @@
 * [iOS下用模数指数进行RSA加密](https://github.com/zhenghongyi/myShared/tree/master/RSA-m&n)
 > iOS下用模数指数进行RSA加密
 
+* [过期重发请求队列](https://github.com/zhenghongyi/myShared/tree/master/RequestQueue)
+> 项目中常用的请求队列，控制过期重登重发
 
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
