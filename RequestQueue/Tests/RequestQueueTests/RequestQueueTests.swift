@@ -1,11 +1,6 @@
 import XCTest
 @testable import RequestQueue
 
-enum TestError: Error {
-    case url
-    case result
-}
-
 final class RequestQueueTests: XCTestCase {
     var requestQueue:RequestQueue?
     let requestHP:RequestHelper = RequestHelper()
@@ -17,20 +12,16 @@ final class RequestQueueTests: XCTestCase {
         requestQueue = RequestQueue(authHelper: authHP, requestHelper: requestHP)
     }
     
-    func testSimple() throws {
-        guard let url = URL(string: "https://baidu.com") else {
-            throw TestError.url
-        }
-        let request = URLRequest(url: url)
-        let wantResult:Result<Any,Error> = .success(["code":"S_OK"])
-        let reponse = WantResponse(delay: 10, result: wantResult)
-        requestHP.responseMap[request] = reponse
+    func testSimple() {
+        requestHP.responseMap = [
+            "https://baidu.com":["code":"S_OK"],
+        ]
         
+        let request = URLRequest(url: URL(string: "https://baidu.com")!)
         let exp:XCTestExpectation? = expectation(description: "1")
         let wrapper = RequestWrapper(request: request) { result in
             exp?.fulfill()
-            
-            XCTAssertTrue(RequestQueueTests.isResultEqual(result: result, success: ["code":"S_OK"]))
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
         }
         requestQueue?.enqueue(wrapper)
         
@@ -39,19 +30,149 @@ final class RequestQueueTests: XCTestCase {
         })
     }
     
-    static func isResultEqual(result:Result<Any,Error>, success:[String:String]) -> Bool {
-        guard case .success(let any) = result else {
-            return false
-        }
-        guard let dic = any as? [String:String], dic.count == success.count else {
-            return false
+    func testMulti() {
+        requestHP.responseMap = [
+            "https://baidu.com":["code":"S_OK"],
+            "https://google.com":["code":"S_OK", "uid":"123"],
+        ]
+        
+        let request1 = URLRequest(url: URL(string: "https://baidu.com")!)
+        let exp1:XCTestExpectation? = expectation(description: "1")
+        let wrapper1 = RequestWrapper(request: request1) { result in
+            exp1?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
         }
         
-        for (key, value) in dic {
-            if value != success[key] {
-                return false
-            }
+        let request2 = URLRequest(url: URL(string: "https://google.com")!)
+        let exp2:XCTestExpectation? = expectation(description: "1")
+        let wrapper2 = RequestWrapper(request: request2) { result in
+            exp2?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK", "sid":"123456"]))
         }
-        return true
+        
+        requestQueue?.enqueue(wrapper1)
+        requestQueue?.enqueue(wrapper2)
+        
+        waitForExpectations(timeout: 60, handler: { error in
+            XCTAssertNil(error, "Oh, we got timeout")
+        })
+    }
+    
+    func testInvalidate() {
+        requestHP.responseMap = [
+            "https://baidu.com":["code":"FA_INVALIDATE"],
+        ]
+        
+        let request = URLRequest(url: URL(string: "https://baidu.com")!)
+        authHP.stateChange = {[weak self] in
+            self?.requestHP.responseMap = [
+                "https://baidu.com":["code":"S_OK"],
+            ]
+        }
+        
+        let exp:XCTestExpectation? = expectation(description: "1")
+        let wrapper = RequestWrapper(request: request) { result in
+            exp?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
+        }
+        requestQueue?.enqueue(wrapper)
+        
+        waitForExpectations(timeout: 60, handler: { error in
+            XCTAssertNil(error, "Oh, we got timeout")
+        })
+    }
+    
+    func testInvalidateFirst() {
+        requestHP.responseMap = [
+            "https://baidu.com":["code":"FA_INVALIDATE"],
+            "https://google.com":["code":"S_OK", "uid":"123"],
+            "https://network.com":["code":"S_OK", "uid":"123", "date":"2020-01-01"]
+        ]
+        
+        authHP.stateChange = {[weak self] in
+            self?.requestHP.responseMap = [
+                "https://baidu.com":["code":"S_OK"],
+                "https://google.com":["code":"S_OK", "uid":"123"],
+                "https://network.com":["code":"S_OK", "uid":"123", "date":"2020-01-01"]
+            ]
+        }
+        
+        let request = URLRequest(url: URL(string: "https://baidu.com")!)
+        let exp:XCTestExpectation? = expectation(description: "1")
+        let wrapper = RequestWrapper(request: request) { result in
+            exp?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
+        }
+        requestQueue?.enqueue(wrapper)
+        
+        let request1 = URLRequest(url: URL(string: "https://google.com")!)
+        let exp1:XCTestExpectation? = expectation(description: "1")
+        let wrapper1 = RequestWrapper(request: request1) { result in
+            exp1?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
+        }
+
+        let request2 = URLRequest(url: URL(string: "https://network.com")!)
+        let exp2:XCTestExpectation? = expectation(description: "1")
+        let wrapper2 = RequestWrapper(request: request2) { result in
+            exp2?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK", "sid":"123456"]))
+        }
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 4) {
+            self.requestQueue?.enqueue(wrapper1)
+            self.requestQueue?.enqueue(wrapper2)
+        }
+        
+        waitForExpectations(timeout: 60, handler: { error in
+            XCTAssertNil(error, "Oh, we got timeout")
+        })
+    }
+    
+    func testTwoInvalidateFirst() {
+        requestHP.responseMap = [
+            "https://baidu.com":["code":"FA_INVALIDATE"],
+            "https://google.com":["code":"FA_INVALIDATE"],
+            "https://network.com":["code":"S_OK", "uid":"123", "date":"2020-01-01"]
+        ]
+        
+        authHP.stateChange = {[weak self] in
+            self?.requestHP.responseMap = [
+                "https://baidu.com":["code":"S_OK"],
+                "https://google.com":["code":"S_OK", "uid":"123"],
+                "https://network.com":["code":"S_OK", "uid":"123", "date":"2020-01-01"]
+            ]
+        }
+        
+        let request = URLRequest(url: URL(string: "https://baidu.com")!)
+        let exp:XCTestExpectation? = expectation(description: "1")
+        let wrapper = RequestWrapper(request: request) { result in
+            exp?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
+        }
+        requestQueue?.enqueue(wrapper)
+        
+        let request1 = URLRequest(url: URL(string: "https://google.com")!)
+        let exp1:XCTestExpectation? = expectation(description: "1")
+        let wrapper1 = RequestWrapper(request: request1) { result in
+            exp1?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK"]))
+        }
+        self.requestQueue?.enqueue(wrapper1)
+
+        let request2 = URLRequest(url: URL(string: "https://network.com")!)
+        let exp2:XCTestExpectation? = expectation(description: "1")
+        let wrapper2 = RequestWrapper(request: request2) { result in
+            exp2?.fulfill()
+            XCTAssertTrue(result.isEqualToDic(["code":"S_OK", "sid":"123456"]))
+        }
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 4) {
+            self.requestQueue?.enqueue(wrapper2)
+        }
+        
+        waitForExpectations(timeout: 60, handler: { error in
+            XCTAssertNil(error, "Oh, we got timeout")
+        })
     }
 }

@@ -9,8 +9,6 @@ struct RequestWrapper {
     
     fileprivate var retryTime:Int = 1 // 仅一次重发机会
     
-//    fileprivate let uuid:String = UUID().uuidString
-    
     fileprivate let completion:RequestCallBack
     
     init(request:URLRequest, needCache:Bool = true, completion:@escaping RequestCallBack) {
@@ -32,12 +30,9 @@ protocol AuthProtocol {
 class RequestQueue {
     let queue = DispatchQueue(label: "ReqeustQueue", attributes: .concurrent)
     
-//    let cacheLock:NSLock = NSLock()
     let authLock:NSLock = NSLock()
     
-    var isAuthing:Bool = true
-    
-//    var caches:[RequestWrapper] = []
+    var isAuthing:Bool = false
     
     let requestHelper:RequestProtocol
     let authHelper:AuthProtocol
@@ -69,6 +64,7 @@ class RequestQueue {
             authLock.unlock()
             return
         }
+        authLock.unlock()
         isAuthing = true
         queue.async(group: nil, qos: .default, flags: .barrier) {
             self.authHelper.authorize {[weak self] result in
@@ -76,56 +72,4 @@ class RequestQueue {
             }
         }
     }
-    
-//    func enqueue(_ wrapper:RequestWrapper) {
-//        if isAuthing == false {
-//            requestHelper.send(request: wrapper.request) {[weak self] result in
-//                let isValidate = self?.authHelper.isSessionValidate(result: result)
-//                if isValidate == true {
-//                    wrapper.completion(result)
-//                } else {
-//                    self?.reAuthorize()
-//                }
-//            }
-//        }
-//
-//        cacheLock.lock()
-//        caches.append(wrapper)
-//        cacheLock.unlock()
-//    }
-//
-//    func reAuthorize() {
-//        authLock.lock()
-//        if isAuthing == true {
-//            authLock.unlock()
-//            return
-//        }
-//
-//        isAuthing = true
-//        authHelper.authorize {[weak self] result in
-//            self?.isAuthing = false
-//            switch result {
-//            case .success(_):
-//                self?.handleCaches(error: nil)
-//            case .failure(let error):
-//                self?.handleCaches(error: error)
-//            }
-//        }
-//    }
-//
-//    func handleCaches(error:Error?) {
-//        cacheLock.lock()
-//        let temp = caches
-//        caches.removeAll()
-//        if let error = error {
-//            for item in temp {
-//                item.completion(.failure(error))
-//            }
-//        } else {
-//            for item in temp {
-//                enqueue(item)
-//            }
-//        }
-//        cacheLock.unlock()
-//    }
 }
