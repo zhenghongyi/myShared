@@ -2,7 +2,7 @@
 记录和分享开发中的所见所得
 
 ## iOS
-* [iOS对html适配二三心得](https://github.com/zhenghongyi/YIHtmlParser/tree/master/iOS对html适配二三心得)
+* [iOS对html适配二三心得](https://github.com/zhenghongyi/myShared/tree/master/iOS对html适配二三心得)
 > html在移动端上的适配，解决诸如超宽table、img标签问题
 
 * [自动添加TestID](https://github.com/zhenghongyi/myShared/tree/master/自动添加TestID)
