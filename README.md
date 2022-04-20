@@ -39,6 +39,9 @@
 * [过期重发请求队列](https://github.com/zhenghongyi/myShared/tree/master/RequestQueue)
 > 项目中常用的请求队列，控制过期重登重发
 
+* [数据库通用协议接口](https://github.com/zhenghongyi/myShared/tree/master/DataBaseProtocol)
+> 抽象数据库增删改插的协议接口(未完善)
+
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
 
