@@ -42,6 +42,9 @@
 * [数据库通用协议接口](https://github.com/zhenghongyi/myShared/tree/master/DataBaseProtocol)
 > 抽象数据库增删改插的协议接口(兴趣)
 
+* [简易Gif显示](https://github.com/zhenghongyi/myShared/tree/master/GifView)
+> 用WebView做的简易Gif显示，不引入第三方
+
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
 
