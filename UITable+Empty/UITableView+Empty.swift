@@ -136,11 +136,9 @@ public extension UITableView {
             NSLayoutConstraint(item: emptyView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: inset.top)
         ])
         
-        let emptyW = bounds.size.width - inset.left - inset.right
-        let emptyH = bounds.size.height - inset.top - inset.bottom
         emptyView.addConstraints([
-            NSLayoutConstraint(item: emptyView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 0, constant: emptyW),
-            NSLayoutConstraint(item: emptyView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 0, constant: emptyH)
+            NSLayoutConstraint(item: emptyView, attribute: .width, relatedBy: .equal, toItem: self, attribute: .width, multiplier: 0, constant: (-inset.top - inset.bottom)),
+            NSLayoutConstraint(item: emptyView, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: (-inset.top - inset.bottom))
         ])
         
     }
