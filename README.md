@@ -45,6 +45,9 @@
 * [简易Gif显示](https://github.com/zhenghongyi/myShared/tree/master/GifView)
 > 用WebView做的简易Gif显示，不引入第三方
 
+* [路由跳转方案](https://github.com/zhenghongyi/myShared/tree/master/路由跳转.md)
+> 个人尝试的路由跳转方案
+
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
 
