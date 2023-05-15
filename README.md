@@ -48,6 +48,12 @@
 * [路由跳转方案](https://github.com/zhenghongyi/myShared/tree/master/路由跳转.md)
 > 个人尝试的路由跳转方案
 
+* [SnapKit简化方案](https://github.com/zhenghongyi/myShared/tree/master/Constraints)
+> SnapKit的简化替代方案
+
+* [MJRefresh简化方案](https://github.com/zhenghongyi/myShared/tree/master/UIScrollView+HeadFooter.swift)
+> MJRefresh的简化替代方案
+
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
 
