@@ -43,6 +43,27 @@ public struct SwiftRSA {
         return resData
     }
     
+    /// 使用公钥字符串进行验签
+    /// - Parameters:
+    ///   - data: 目标Data
+    ///   - signature: 已被私钥签名的Data
+    ///   - publicKey: 公钥字符串
+    /// - Returns: 验签结果
+    public static func verifySignature(_ data: Data, signature:Data, publicKey:String) -> Bool {
+        guard let secKey = addPublicKey(publicKey) else { return false }
+        return verifySignature(data, signature: signature, with: secKey)
+    }
+    
+    static func verifySignature(_ data: Data, signature:Data, with secKey: SecKey) -> Bool {
+        var error: Unmanaged<CFError>?
+        let result = SecKeyVerifySignature(secKey, .rsaSignatureDigestPKCS1v15SHA256, data as CFData, signature as CFData, &error)
+        if error != nil {
+            print(error?.takeRetainedValue())
+            return false
+        }
+        return result
+    }
+    
     /// 使用私钥字符串解密Data
     /// - Parameters:
     ///   - data: 需解密的Data
@@ -81,6 +102,26 @@ public struct SwiftRSA {
             index += pieceLen
         }
         return resData
+    }
+    
+    /// 使用私钥字符串签名
+    /// - Parameters:
+    ///   - data: 需要签名的Data
+    ///   - privateKey: 私钥字符串
+    /// - Returns: 签名后的字符串
+    public static func signature(_ data: Data, privateKey:String) -> Data? {
+        guard let secKey = addPrivateKey(privateKey) else { return nil }
+        return signature(data, with: secKey)
+    }
+    
+    static func signature(_ data: Data, with secKey: SecKey) -> Data? {
+        var error: Unmanaged<CFError>?
+        let signature = SecKeyCreateSignature(secKey, .rsaSignatureDigestPKCS1v15SHA256, data as CFData, &error) as? Data
+        if error != nil {
+            print(error?.takeRetainedValue())
+            return nil
+        }
+        return signature
     }
     
     // MARK: 密钥对处理
