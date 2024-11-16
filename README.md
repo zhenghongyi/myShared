@@ -59,6 +59,10 @@
 
 > 依照angular提交规范(暂只支持fix和feat)，生成修改日志
 
+* [iOS打包framwork脚本](https://github.com/zhenghongyi/myShared/tree/master/framework)
+
+> iOS打包framwork或xcframework脚本
+
 ## Other
 
 * [Github-Actions](https://github.com/zhenghongyi/myShared/tree/master/Github-Action/Github-Action.md)
