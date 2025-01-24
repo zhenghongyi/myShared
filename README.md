@@ -54,6 +54,9 @@
 * [MJRefresh简化方案](https://github.com/zhenghongyi/myShared/tree/master/UIScrollView+HeadFooter.swift)
 > MJRefresh的简化替代方案
 
+* [S/MIME](https://github.com/zhenghongyi/myShared/tree/master/S-MIME.md)
+> S/MIME 发信解信过程的简单介绍
+
 ## Python
 * [生成修改日志](https://github.com/zhenghongyi/myShared/tree/master/ChangeLog.py)
 
